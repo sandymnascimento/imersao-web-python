@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="popup.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <form>
+        <fieldset>
+            <div>
+                <label>Firstname:</label>
+                <input type='text' name="sobrenome" id = "firstname">
+            </div>
+
+            <div>
+                <label>Name:</label>
+                <input type='text' name="nome" id = "name">
+            </div>
+
+            <div>
+                <label>Age:</label>
+                <input type='number' min="0" id = "age">
+            </div>
+
+            <div>
+                <label>Phone:</label>
+                <input type='tel' name="fone" id = "phone">
+            </div>
+
+            <div>
+                <label>Email:</label>
+                <input type='email' name="email" id = "email">
+            </div>
+
+            <div>
+                <label>Student at 42?</label>
+                <input type='checkbox' name="student" id = "student">
+            </div>
+
+            <form>
+                <label>                    
+                    <input type='radio' name="gender" id="gender_male" value="Male"> 
+                    <label>Male</label>
+                </label>
+                <label>
+                    <input type='radio' name="gender" id="gender_female" value="Female"> 
+                    <label>Female</label>
+                </label>
+                <label>
+                    <input type='radio' name="gender" id="gender_other" value="Other"> 
+                    <label>Other</label>
+                </label>
+            </form>
+            <div>
+                <button type="submit" onclick="displayFormContents();">Concluido</button>
+            </div>
+        </fieldset>
+        </form>
+</body>
+</html>

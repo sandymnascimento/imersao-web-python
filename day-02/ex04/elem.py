@@ -31,10 +31,8 @@ class Elem:
 
     def __str__(self):
         """
-        The __str__() method will permit us to make a plain HTML representation
-        of our elements.
-        Make sure it renders everything (tag, attributes, embedded
-        elements...).
+        The __str__() method will permit us to make a plain HTML representation of our elements.
+        Make sure it renders everything (tag, attributes, embedded elements...).
         """
         if self.tag_type == 'double':
 
@@ -42,10 +40,10 @@ class Elem:
                 result = f'<{self.tag} {self.attr}>{self.content}</{self.tag}>' 
             elif self.attr != {}:
                 result = f'<{self.tag} {self.attr}></{self.tag}>'
-            elif type(self.content) is list:
-                result = f'<{self.tag}>{self.__make_content}</{self.tag}>'
+            elif isinstance(self.content, Elem):
+                result = f'<{self.tag}>\n  {self.content}\n</{self.tag}>' #mesmo comportamento sempre, precisa verificar se foi chamado por um Elem, ai ele incrementa.
             elif self.content:
-                result = f'<{self.tag}>\n  {self.content}\n</{self.tag}>'
+                result = f'<{self.tag}>{self.__make_content()}</{self.tag}>'
             else:
                 result = f'<{self.tag}></{self.tag}>' 
 
@@ -73,13 +71,12 @@ class Elem:
         if len(self.content) == 0:
             return ''
         result = '\n'
-        space = ''
         for elem in self.content:
-            space += '  '
-            if isinstance(elem, Elem): 
-                print(elem)
-                elem = f'{elem}\n'
-            result += f'{space}{elem}\n'
+            if elem == '':
+                continue
+            result += f'  {elem}\n'
+        if result == '\n':
+            return ''
         return result
 
     def add_content(self, content):
@@ -103,4 +100,5 @@ class Elem:
 
     
 if __name__ == '__main__':
-    print(Elem(content=[Text('foo'), Text('bar'), Elem()]))
+    print(str(Elem(content=[Text(''), Text('')])))
+    #print(str(Elem(content=Elem(content=Elem(content=Elem())))))

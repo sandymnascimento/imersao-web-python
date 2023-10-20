@@ -1,13 +1,11 @@
 #!/usr/bin/python3
 
-
 class Text(str):
     """
     A Text class to represent a text you could use with your HTML elements.
 
     Because directly using str class was too mainstream.
     """
-
     def __str__(self):
         """
         Do you really need a comment to understand this method?..
@@ -18,7 +16,7 @@ class Text(str):
 class Elem:
     class ValidationError(Exception):
         def __init__(self):
-            super().__init__('This coffee machine has to be repaired.')
+            super().__init__('incorrect behaviour.')
     """
     Elem will permit us to represent our HTML elements.
     """
@@ -27,7 +25,11 @@ class Elem:
         self.tag = tag 
         self.attr = attr
         self.tag_type = tag_type
-        self.content = content
+        if content != None and not Elem.check_type(content):
+            raise(Elem.ValidationError)
+        else:
+            self.content = content
+
 
     def __str__(self):
         """
@@ -41,14 +43,13 @@ class Elem:
             elif self.attr != {}:
                 result = f'<{self.tag} {self.attr}></{self.tag}>'
             elif isinstance(self.content, Elem):
-                result = f'<{self.tag}>\n  {self.content}\n</{self.tag}>' #mesmo comportamento sempre, precisa verificar se foi chamado por um Elem, ai ele incrementa.
+                result = f'<{self.tag}>\n  {self.content}\n</{self.tag}>'
             elif self.content:
+                #if  all(isinstance(elem, Elem) for elem in self.content):
+                #    result = f'<{self.tag}>\n  {self.content}\n</{self.tag}>' #mesmo comportamento sempre, precisa verificar se foi chamado por um Elem, ai ele incrementa.
                 result = f'<{self.tag}>{self.__make_content()}</{self.tag}>'
             else:
                 result = f'<{self.tag}></{self.tag}>' 
-
-        
-
         elif self.tag_type == 'simple':
             if self.attr != {}:
                 result = f'<{self.tag}>' 
@@ -68,20 +69,23 @@ class Elem:
         """
         Here is a method to render the content, including embedded elements.
         """
-        if len(self.content) == 0:
-            return ''
-        result = '\n'
-        for elem in self.content:
-            if elem == '':
-                continue
-            result += f'  {elem}\n'
-        if result == '\n':
-            return ''
-        return result
+        try:
+            if len(self.content) == 0:
+                return ''
+            result = '\n'
+            for elem in self.content:
+                if elem == '':
+                    continue
+                result += f'  {elem}\n'
+            if result == '\n':
+                return ''
+            return result
+        except Exception as e:
+            raise(Elem.ValidationError)
 
     def add_content(self, content):
         if not Elem.check_type(content):
-            raise Elem.ValidationError
+            raise(Elem.ValidationError)
         if type(content) == list:
             self.content += [elem for elem in content if elem != Text('')]
         elif content != Text(''):
@@ -100,5 +104,12 @@ class Elem:
 
     
 if __name__ == '__main__':
-    print(str(Elem(content=[Text(''), Text('')])))
+    #print(str(Elem(content=[Text(''), Text('')])))
     #print(str(Elem(content=Elem(content=Elem(content=Elem())))))
+    #print(str(Elem()))
+    #elem = Elem(content='')
+   
+    # Escaping <, >, "...
+    print(str(Text('<'))) #== '&lt;') 
+    print(str(Text('>'))) #== '&gt;') 
+    print(str(Text('"'))) #== '&quot;') 

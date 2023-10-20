@@ -40,24 +40,30 @@ class Elem:
             self.content = content
 
 
-    def __str__(self):
+    def __str__(self, nivel=0):
         """
         The __str__() method will permit us to make a plain HTML representation of our elements.
         Make sure it renders everything (tag, attributes, embedded elements...).
         """
-        result = ''
+        espacos = '  ' * nivel
         if self.tag_type == 'double':
             if  self.attr and self.content:
                 result = f'<{self.tag} {self.__make_attr()}>{self.__make_content()}</{self.tag}>' 
-            elif self.attr:
-                result = f'<{self.tag} {self.__make_attr()}></{self.tag}>'
             elif isinstance(self.content, Elem):
+                content_str = self.content.__str__(nivel + 1)
+                result = f'{espacos}<{self.tag}>\n{content_str}\n{espacos}</{self.tag}>'
+                #self.content = self.__make_content()
                 #entrei aqui preciso alterar o content p acrescentar dois espaços
-                result = f'<{self.tag}>\n  {self.content}\n</{self.tag}>'
+                #result = f'<{self.tag}>\n  {self.content}\n</{self.tag}>'
             elif self.content:
                 result = f'<{self.tag}>{self.__make_content()}</{self.tag}>'
+            elif self.attr:
+                result = f'<{self.tag} {self.__make_attr()}></{self.tag}>'
             else:
-                result = f'<{self.tag}></{self.tag}>'
+                if nivel > 0:
+                    result = f'{espacos}<{self.tag}></{self.tag}>'
+                else:
+                    result = f'<{self.tag}></{self.tag}>'
 
         elif self.tag_type == 'simple':
             if self.attr:

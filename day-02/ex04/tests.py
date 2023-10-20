@@ -111,7 +111,7 @@ def test_embedding():
 def test():
     test_text()
     test_elem_basics()
-    #test_embedding()
+    test_embedding()
     test_empty_texts()
     test_errors()
     

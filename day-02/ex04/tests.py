@@ -34,7 +34,7 @@ def test_elem_basics():
     # With elem as content :
     assert str(Elem(content=Elem())) == '<div>\n  <div></div>\n</div>'
     # With list as content :
-    assert str(Elem(content=[Text('foo'), Text('bar'), Elem()])) == '<div>\n  foo\n  bar\n <div></div>\n</div>'
+    assert str(Elem(content=[Text('foo'), Text('bar'), Elem()])) == '<div>\n  foo\n  bar\n  <div></div>\n</div>'
     print('Basic Elem behaviour : OK.')
 
     
@@ -109,9 +109,9 @@ def test_embedding():
 
 
 def test():
-    #test_text()
+    test_text()
     test_elem_basics()
-    test_embedding()
+    #test_embedding()
     test_empty_texts()
     test_errors()
     

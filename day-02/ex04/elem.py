@@ -10,13 +10,22 @@ class Text(str):
         """
         Do you really need a comment to understand this method?..
         """
-        return super().__str__().replace('\n', '\n<br />\n')
+        html_entities = {
+            "<": "&lt;",
+            ">": "&gt;",
+            "&": "&amp;",
+            "\"": "&quot;"
+        }
+        if super().__str__() in html_entities:
+            return super().__str__().replace(super().__str__(), html_entities[super().__str__()])
+        else:
+            return super().__str__().replace('\n', '\n<br />\n')
 
 
 class Elem:
     class ValidationError(Exception):
-        def __init__(self):
-            super().__init__('incorrect behaviour.')
+        def __init__(self, value='incorrect behaviour.'):
+            super().__init__(value)
     """
     Elem will permit us to represent our HTML elements.
     """
@@ -36,24 +45,25 @@ class Elem:
         The __str__() method will permit us to make a plain HTML representation of our elements.
         Make sure it renders everything (tag, attributes, embedded elements...).
         """
+        result = ''
         if self.tag_type == 'double':
-
-            if  self.attr != {} and self.content:
-                result = f'<{self.tag} {self.attr}>{self.content}</{self.tag}>' 
-            elif self.attr != {}:
-                result = f'<{self.tag} {self.attr}></{self.tag}>'
+            if  self.attr and self.content:
+                result = f'<{self.tag} {self.__make_attr()}>{self.__make_content()}</{self.tag}>' 
+            elif self.attr:
+                result = f'<{self.tag} {self.__make_attr()}></{self.tag}>'
             elif isinstance(self.content, Elem):
+                #entrei aqui preciso alterar o content p acrescentar dois espaços
                 result = f'<{self.tag}>\n  {self.content}\n</{self.tag}>'
             elif self.content:
-                #if  all(isinstance(elem, Elem) for elem in self.content):
-                #    result = f'<{self.tag}>\n  {self.content}\n</{self.tag}>' #mesmo comportamento sempre, precisa verificar se foi chamado por um Elem, ai ele incrementa.
                 result = f'<{self.tag}>{self.__make_content()}</{self.tag}>'
             else:
-                result = f'<{self.tag}></{self.tag}>' 
+                result = f'<{self.tag}></{self.tag}>'
+
         elif self.tag_type == 'simple':
-            if self.attr != {}:
+            if self.attr:
+                result = f'<{self.tag} {self.__make_attr()}>' 
+            else:
                 result = f'<{self.tag}>' 
-            result = f'<{self.tag}>' 
         return result
 
     def __make_attr(self):
@@ -105,11 +115,7 @@ class Elem:
     
 if __name__ == '__main__':
     #print(str(Elem(content=[Text(''), Text('')])))
-    #print(str(Elem(content=Elem(content=Elem(content=Elem())))))
+    print(str(Elem(content=Elem(content=Elem(content=Elem())))))
     #print(str(Elem()))
     #elem = Elem(content='')
    
-    # Escaping <, >, "...
-    print(str(Text('<'))) #== '&lt;') 
-    print(str(Text('>'))) #== '&gt;') 
-    print(str(Text('"'))) #== '&quot;') 

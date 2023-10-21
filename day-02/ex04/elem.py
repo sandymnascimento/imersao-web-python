@@ -7,9 +7,6 @@ class Text(str):
     Because directly using str class was too mainstream.
     """
     def __str__(self):
-        """
-        Do you really need a comment to understand this method?..
-        """
         html_entities = {
             "<": "&lt;",
             ">": "&gt;",
@@ -23,13 +20,14 @@ class Text(str):
 
 
 class Elem:
-    class ValidationError(Exception):
-        def __init__(self, value='incorrect behaviour.'):
-            super().__init__(value)
     """
     Elem will permit us to represent our HTML elements.
     """
 
+    class ValidationError(Exception):
+        def __init__(self, value='incorrect behaviour.'):
+            super().__init__(value)
+    
     def __init__(self, tag='div', attr={}, content=None, tag_type='double'):
         self.tag = tag 
         self.attr = attr
@@ -43,33 +41,37 @@ class Elem:
     def __str__(self, nivel=0):
         """
         The __str__() method will permit us to make a plain HTML representation of our elements.
-        Make sure it renders everything (tag, attributes, embedded elements...).
         """
         espacos = '  ' * nivel
-        if self.tag_type == 'double':
+        
+        if self.tag_type == 'simple':
+            if self.attr:
+                result = f'<{self.tag} {self.__make_attr()}>' 
+            else:
+                result = f'<{self.tag}>'
+        elif self.tag_type == 'double':
             if  self.attr and self.content:
                 result = f'<{self.tag} {self.__make_attr()}>{self.__make_content()}</{self.tag}>' 
+
+            elif self.attr:
+                result = f'<{self.tag} {self.__make_attr()}></{self.tag}>'
+
+            elif isinstance(self.content, Text):
+                result = f'{espacos}<{self.tag}>\n{espacos}  {self.content.__str__()}\n{espacos}</{self.tag}>'    
+
             elif isinstance(self.content, Elem):
                 content_str = self.content.__str__(nivel + 1)
                 result = f'{espacos}<{self.tag}>\n{content_str}\n{espacos}</{self.tag}>'
-                #self.content = self.__make_content()
-                #entrei aqui preciso alterar o content p acrescentar dois espaços
-                #result = f'<{self.tag}>\n  {self.content}\n</{self.tag}>'
+
             elif self.content:
                 result = f'<{self.tag}>{self.__make_content()}</{self.tag}>'
-            elif self.attr:
-                result = f'<{self.tag} {self.__make_attr()}></{self.tag}>'
+
             else:
                 if nivel > 0:
                     result = f'{espacos}<{self.tag}></{self.tag}>'
                 else:
                     result = f'<{self.tag}></{self.tag}>'
 
-        elif self.tag_type == 'simple':
-            if self.attr:
-                result = f'<{self.tag} {self.__make_attr()}>' 
-            else:
-                result = f'<{self.tag}>' 
         return result
 
     def __make_attr(self):
@@ -96,7 +98,7 @@ class Elem:
             if result == '\n':
                 return ''
             return result
-        except Exception as e:
+        except:
             raise(Elem.ValidationError)
 
     def add_content(self, content):
@@ -120,8 +122,7 @@ class Elem:
 
     
 if __name__ == '__main__':
-    #print(str(Elem(content=[Text(''), Text('')])))
-    print(str(Elem(content=Elem(content=Elem(content=Elem())))))
-    #print(str(Elem()))
-    #elem = Elem(content='')
-   
+    img = Elem('img', {'src': 'http://www.python.org'}, tag_type='simple')
+    head = Elem(tag=Text('head'),content=Elem(tag=Text('title'),content=Text('Hello ground!')))
+    body = Elem(tag=Text('body'),content=[Elem(tag=Text('h1'),content=Text('Oh no, not again!')), img])
+    print(str(Elem(tag=Text('html'),content=[head, body])))

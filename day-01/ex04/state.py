@@ -31,6 +31,7 @@ def search(capital):
         print('Unknown capital city')
 
 if __name__ == '__main__':
-    print(sys.argv)
     if len(sys.argv) == 2:
         search(sys.argv[1])
+    else:
+        print('Unknown state')

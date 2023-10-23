@@ -14,8 +14,7 @@ class Intern:
         raise('I’m just an intern, I can’t do that...')
     
     def make_coffee(self):
-        coffee = Intern.Coffee()
-        return coffee.__str__()
+        return Intern.Coffee()
     
 if __name__ == '__main__':        
     estag = Intern()

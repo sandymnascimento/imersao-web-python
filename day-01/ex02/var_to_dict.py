@@ -1,7 +1,10 @@
 def var_to_dict(d):
     dicionario = {}
     for item in d:
-        dicionario[item[1]] = item[0] 
+        if item[1] in dicionario:
+            dicionario[item[1]] = f'{dicionario[item[1]]} {item[0]}'
+        else:        
+            dicionario[item[1]] = item[0] 
     for chave, valor in dicionario.items():
         print(f'{chave} : {valor}')
 

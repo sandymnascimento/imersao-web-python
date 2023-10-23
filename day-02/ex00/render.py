@@ -1,8 +1,6 @@
 import sys
 import os 
 import re
-import settings as sett
-
 
 def open_file(arq):
     folder = os.getcwd()     

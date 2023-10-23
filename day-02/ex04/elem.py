@@ -3,8 +3,6 @@
 class Text(str):
     """
     A Text class to represent a text you could use with your HTML elements.
-
-    Because directly using str class was too mainstream.
     """
     def __str__(self):
         html_entities = {
@@ -39,9 +37,6 @@ class Elem:
 
 
     def __str__(self, nivel=0):
-        """
-        The __str__() method will permit us to make a plain HTML representation of our elements.
-        """
         espacos = '  ' * nivel
         
         if self.tag_type == 'simple':
@@ -72,19 +67,12 @@ class Elem:
         return result
 
     def __make_attr(self):
-        """
-        Here is a function to render our elements attributes.
-        """
         result = ''
         for pair in sorted(self.attr.items()):
             result += ' ' + str(pair[0]) + '="' + str(pair[1]) + '"'
         return result
 
     def __make_content(self, nivel, espacos=''):
-        """
-        Here is a method to render the content, including embedded elements.
-
-        """
         try:
             result ='\n'
             if isinstance(self.content, Elem):
@@ -100,11 +88,10 @@ class Elem:
                     for line in separar:
                         result += f'{espacos}  {line}\n'
             else:
-                result = '\n'
                 for elem in self.content:
                     if elem == '':
                         continue
-                    result += f'  {elem}\n' #O elem é uma tag completa, quebra a formatação pois só add espaços no inicio.
+                    result += f'  {elem}\n'
                 
                 if result == '\n':
                     return ''
@@ -122,10 +109,6 @@ class Elem:
 
     @staticmethod
     def check_type(content):
-        """
-        Is this object a HTML-compatible Text instance or a Elem, or even a
-        list of both?
-        """
         return (isinstance(content, Elem) or type(content) == Text or
                 (type(content) == list and all([type(elem) == Text or
                                                 isinstance(elem, Elem)

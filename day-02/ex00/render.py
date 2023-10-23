@@ -5,7 +5,6 @@ import settings as sett
 
 
 def open_file(arq):
-    def open_file(arq):
     folder = os.getcwd()     
     conteudo = os.listdir(folder)
     

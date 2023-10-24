@@ -24,7 +24,7 @@ def order():
     
     for i in sorted(d, key = d.get):
         print(i)
-    for i in sorted(d):
+    for i in sorted(d, key=lambda x: x.title()):
         print(i)
 
 if __name__ == '__main__':

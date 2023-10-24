@@ -190,10 +190,10 @@ class Li(Elem):
             self.content = content
 
 if __name__ == '__main__':
-    title = Title(content=Text('Hello ground!'))
+    title = Title(content=Text('"Hello ground!"'))
     head = Head(title)
     img = Img({'src': 'http://www.python.org'})
-    h1 = H1(content=Text('Oh no, not again!'))
+    h1 = H1(content=Text('"Oh no, not again!"'))
 
     div = Div(content=Text("testando"))
 
@@ -208,4 +208,4 @@ if __name__ == '__main__':
     body = Body([h1, img])
 
     print( Html( [head, body] ) )
-    print( Html( [Head(), Body()]))
+    #print( Html( [Head(), Body()]))

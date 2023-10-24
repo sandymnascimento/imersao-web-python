@@ -23,5 +23,6 @@ if __name__ == '__main__':
 
     mark = Intern("Mark")
     print(mark.__str__())
-    
+    print(mark.work())
+
     #estag.work()

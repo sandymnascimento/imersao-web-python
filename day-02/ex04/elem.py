@@ -117,7 +117,7 @@ class Elem:
     
 if __name__ == '__main__':
     img = Elem('img', {'src': 'http://www.python.org'}, tag_type='simple')
-    head = Elem(tag=Text('head'),content=Elem(tag=Text('title'),content=Text('Hello ground!')))
-    body = Elem(tag=Text('body'),content=[Elem(tag=Text('h1'),content=Text('Oh no, not again!')), img])
+    head = Elem(tag=Text('head'),content=Elem(tag=Text('title'),content=Text('"Hello ground!"')))
+    body = Elem(tag=Text('body'),content=[Elem(tag=Text('h1'),content=Text('"Oh no, not again!"')), img])
     
     print(str(Elem(tag=Text('html'),content=[head, body])))

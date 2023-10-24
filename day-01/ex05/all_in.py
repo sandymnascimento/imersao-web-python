@@ -38,7 +38,8 @@ def search(names):
                             break
                     break
         if stop:
-            print(f'{string.strip()} is neither a capital city nor a state')
+            if string != '':
+                print(f'{string.strip()} is neither a capital city nor a state')
 
 if __name__ == '__main__':
     if len(sys.argv) == 2:

@@ -37,5 +37,3 @@ if __name__ == '__main__':
         search(sys.argv[1])
     elif len(sys.argv)  == 3:
         search(sys.argv[1] + " " + sys.argv[2])
-    else:
-        print('Unknown state')

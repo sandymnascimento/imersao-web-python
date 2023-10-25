@@ -7,7 +7,7 @@ def open_file(arq):
     conteudo = os.listdir(folder)
     
     if arq in conteudo and 'settings.py' in conteudo:       
-        with open(arq, 'r') as template, open('cv.html', 'w') as cv:
+        with open(arq, 'r') as template, open('myCV.html', 'w') as cv:
             template = template.read()
 
             substituicoes = {}

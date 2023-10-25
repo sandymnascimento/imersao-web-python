@@ -10,19 +10,23 @@ class Intern:
     def __str__(self):
         return self.name
 
-    def work(self):
-        raise('I’m just an intern, I can’t do that...')
-    
     def make_coffee(self):
         return Intern.Coffee()
-    
-if __name__ == '__main__':        
+
+    def work(self):
+        try:
+            raise(Exception('I’m just an intern, I can’t do that...'))
+        except Exception as ex:
+            print(f'{str(ex)}')         
+
+def main():
+    mark = Intern('Mark')
+    print(mark.__str__())
+    print(mark.make_coffee())
+
     estag = Intern()
     print(estag.__str__())
-    print(estag.make_coffee())
+    estag.work()
 
-    mark = Intern("Mark")
-    print(mark.__str__())
-    print(mark.work())
-
-    #estag.work()
+if __name__ == '__main__':        
+    main()

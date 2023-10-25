@@ -114,10 +114,12 @@ class Elem:
                                                 isinstance(elem, Elem)
                                                 for elem in content])))
 
-    
-if __name__ == '__main__':
+def main():
     img = Elem('img', {'src': 'http://www.python.org'}, tag_type='simple')
     head = Elem(tag=Text('head'),content=Elem(tag=Text('title'),content=Text('"Hello ground!"')))
     body = Elem(tag=Text('body'),content=[Elem(tag=Text('h1'),content=Text('"Oh no, not again!"')), img])
     
     print(str(Elem(tag=Text('html'),content=[head, body])))
+    
+if __name__ == '__main__':
+    main()

@@ -6,7 +6,9 @@ class CoffeeMachine:
         def __init__(self):
             self.name = 'empty cup'
             self.price = 0.90
-            self.descript = 'An empty cup?! Gimme my money back!'
+        
+        def description(self):
+            return 'An empty cup?! Gimme my money back!'
 
     class BrokenMachineException(Exception):
         def __init__(self):
@@ -31,10 +33,12 @@ class CoffeeMachine:
             print(f'{str(ex)}')
             self.repair()
 
-
-if __name__ == '__main__':
+def main():
     coffeemach = CoffeeMachine()
-    for i in range(13):
+    for i in range(23):
         drinkOptions = [beverages.Coffee(), beverages.Chocolate(), beverages.Cappuccino(), beverages.Tea()]
         choose = random.choice(drinkOptions)
         coffeemach.serve(choose)
+
+if __name__ == '__main__':
+    main()

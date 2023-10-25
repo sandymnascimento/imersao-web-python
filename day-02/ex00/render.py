@@ -21,6 +21,9 @@ def open_file(arq):
                 template = re.sub(model, value, template)
             cv.write(template)
     
+def main():
+   if len(sys.argv) == 2:
+        open_file(sys.argv[1])     
+        
 if __name__ == '__main__':
-    if len(sys.argv) == 2:
-        open_file(sys.argv[1])
+    main()

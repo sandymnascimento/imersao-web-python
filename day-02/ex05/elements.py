@@ -189,7 +189,7 @@ class Li(Elem):
         else:
             self.content = content
 
-if __name__ == '__main__':
+def main():
     title = Title(content=Text('"Hello ground!"'))
     head = Head(title)
     img = Img({'src': 'http://www.python.org'})
@@ -209,3 +209,6 @@ if __name__ == '__main__':
 
     print( Html( [head, body] ) )
     #print( Html( [Head(), Body()]))
+
+if __name__ == '__main__':
+    main()

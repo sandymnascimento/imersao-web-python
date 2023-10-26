@@ -1,65 +1,85 @@
 import sys
-import json
 import dewiki
 import requests
 
-def _wiki_request(params):
-    params['format'] = 'json'
-    if not 'action' in params:
-        params['action'] = 'query'
+def make_request(params, lang):
+    url = f'http://{lang}.wikipedia.org/w/api.php'
 
-    r = requests.get('http://en.wikipedia.org/w/api.php', params=params)
+    r = requests.get(url=url, params=params)
+    
+    response_text = r.text
+    
+    start = response_text.find('{')
+    response_json = response_text[start:]
+    response_dict = eval(response_json)
 
-    return r.json()
+    return response_dict
 
-def search(query, results=10, suggestion=False):
+def names(query, lang='en'):
     search_params = {
-        'list': 'search',
-        'srprop': '',
-        'srlimit': results,
-        'limit': results,
+        'format' : 'json',
+        'action' : 'query',
+        'list' : 'search',
+        'utf8': 1,
+        'srlimit': 5,
+        'srinfo' : 'suggestion',
         'srsearch': query
     }
-    if suggestion:
-        search_params['srinfo'] = 'suggestion'
 
-    raw_results = _wiki_request(search_params)
+    raw_results = make_request(search_params, lang)
 
-    search_results = (d['title'] for d in raw_results['query']['search'])
+    search_results = []
+    for result in raw_results.get('query', {}).get('search', []):
+        search_results.append(result['title'])
 
-    if suggestion:
-        if raw_results['query'].get('searchinfo'):
-            return list(search_results), raw_results['query']['searchinfo']['suggestion']
+    searchinfo = raw_results.get('query', {}).get('searchinfo', {})
+    return search_results, searchinfo.get('suggestion')
+
+
+def search(title, lang='en', auto_suggest=True):
+    name = title.replace(' ', '_').lower()
+    title = title.title()
+    
+    if auto_suggest:
+        results, suggestion = names(title, lang)
+
+        if results:
+            title = results[0].title()
         else:
-            return list(search_results), None
+            title = suggestion.title()
+        
+    query_params = {
+        'action': 'query',
+        'format' : 'json',
+        'prop': 'extracts|revisions',
+        'explaintext': '',
+        'rvprop': 'ids',
+        'titles': title
+    }
 
-    return list(search_results)
+    request = make_request(query_params, lang)
 
-def page(title=None, auto_suggest=True):
-    if title is not None:
-        if auto_suggest:
-            results, suggestion = search(title, results=1, suggestion=True)
-            title = suggestion or results[0]
-        query_params = {
-            'prop': 'extracts|revisions',
-            'explaintext': '',
-            'rvprop': 'ids'
-        }
-        query_params['titles'] = title
+    try:
+        query = request.get('query', {})
+        pages = query.get('pages', {})
+        pageid = list(pages.keys())[0]
 
-        request = _wiki_request(query_params)
-        query = request['query']
-        pageid = list(query['pages'].keys())[0]
-
-        x = title.replace(' ', '_')
-        result= open(f'{x}.wiki', 'w')
-        result.write(request['query']['pages'][pageid]['extract'])
-
+        if not pages[pageid]['extract'] == '':
+            result= open(f'{name}.html', 'w')
+            result.write(dewiki.from_string(pages[pageid]['extract']))
+            print('O arquivo com o conteúdo da requisição foi gerado.')
+        else:
+            raise(Exception)
+    except Exception as ex:
+        print('A requisição não apresentou resultados.')
 
 def main():
-    #adicionar opção de escolher o idioma
     if len(sys.argv) == 2:
-        page(sys.argv[1])
+        search(sys.argv[1])
+    elif len(sys.argv) == 3:
+        search(sys.argv[1], sys.argv[2])
+    else:
+        print('Necessário informar o que deseja buscar.')
 
 if __name__ == '__main__':
     main()

@@ -65,7 +65,7 @@ def search(title, lang='en', auto_suggest=True):
         pageid = list(pages.keys())[0]
 
         if not pages[pageid]['extract'] == '':
-            result= open(f'{name}.html', 'w')
+            result= open(f'{name}.wiki', 'w')
             result.write(dewiki.from_string(pages[pageid]['extract']))
             print('O arquivo com o conteúdo da requisição foi gerado.')
         else:
